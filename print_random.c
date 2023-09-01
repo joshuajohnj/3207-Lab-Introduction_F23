@@ -7,7 +7,7 @@ char randchar(){
 	
 	int ranNum = (rand() +1) % 26;
 
-	
+	//printf("%c", alphabet[ranNum]);
 
 	return alphabet[ranNum];
 }
