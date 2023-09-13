@@ -31,13 +31,15 @@ void listFiles()
 int isDirectory(char * directoryName)
 {
     struct stat check;
-    stat(directoryName,&check);
 
-    if(S_ISDIR(check.st_mode) != 0)
+    if(stat(directoryName,&check)!= 0)
     {
+        return FAILURE;
+    }
+    else{   
         return SUCCESS;
     }
-    return FAILURE;
+    
     
 }
 
@@ -49,7 +51,7 @@ int recursivelyPrint(char* directoryName, int tabCount)
     DIR *dir = opendir(directoryName);
     if(dir == NULL)
     {
-        printf("opendir error: %s \n", strerror(errno));
+        printf("opendir error: %s, with %s \n", strerror(errno), directoryName);
         exit(EXIT_FAILURE);
     }
     // init dirent struct
@@ -58,23 +60,24 @@ int recursivelyPrint(char* directoryName, int tabCount)
     DIR * prevdir;
  
     // iterate through out each entry in the directory
+    
     while((entry = readdir(dir)) != NULL)
     {
         // if were in the recurisive function print a tab for each file
-        if(tabCount == 1  && !(isDirectory(entry->d_name)))
+        if(tabCount == 1)
         {
             printf("   ");
         }
-        //else if were in the intial directory print without tab
-        printf("%s\n", entry->d_name);
+        // else if were in the intial directory print without tab
+        puts(entry->d_name);
 
-        if(isDirectory(entry->d_name) && strcmp(entry->d_name, ".") != 0 && strcmp(entry->d_name, "..") != 0 )
+        if(entry->d_type == DT_DIR && strcmp(entry->d_name, ".") != 0 && strcmp(entry->d_name, "..") != 0 )
         {
         /*
             we've found a directory!
             now construct the path and call the function recursively
         */
-            char path[1024] ="";
+            char path[1024] = {0};
             strcat(path,directoryName);
             strcat(path,"/");
             strcat(path,entry->d_name);
@@ -93,6 +96,7 @@ int recursivelyPrint(char* directoryName, int tabCount)
 
 int main(int argc, char*argv[])
 {
+    //printf("%d\n", isDirectory(argv[1]));
     // if there is more than one params exit code
     if(argc > 2)
     {
