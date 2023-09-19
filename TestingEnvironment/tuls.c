@@ -46,7 +46,6 @@ int isDirectory(char * directoryName)
 // function to print Directory recursively
 int recursivelyPrint(char* directoryName, int tabCount)
 {
-    
     // open directory with param
     DIR *dir = opendir(directoryName);
     if(dir == NULL)
@@ -59,7 +58,7 @@ int recursivelyPrint(char* directoryName, int tabCount)
     // create a previous directory path, to be used later
     DIR * prevdir;
  
-    // iterate through out each entry in the directory
+    // iterate throughout each entry in the directory
     
     while((entry = readdir(dir)) != NULL)
     {

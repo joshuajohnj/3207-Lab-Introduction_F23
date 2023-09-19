@@ -1,0 +1,4 @@
+This
+is
+copy2
+.txt
